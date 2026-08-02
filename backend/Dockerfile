@@ -4,11 +4,8 @@ WORKDIR /workspace
 
 COPY pom.xml .
 COPY src ./src
-COPY mvnw .
-COPY .mvn ./.mvn
 
-RUN chmod +x mvnw
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jre-jammy
 
