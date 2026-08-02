@@ -35,6 +35,7 @@ __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+.pytest_cache/
 
 .venv/
 venv/
@@ -82,7 +83,7 @@ logs/
 # Operating System
 ##################################################
 
-.DS_Store
+**/.DS_Store
 Thumbs.db
 desktop.ini
 
@@ -113,7 +114,7 @@ docker/**/*.log
 tools/
 
 ##################################################
-# Optional (uncomment if needed)
+# Optional
 ##################################################
 
 # frontend/.cache/
