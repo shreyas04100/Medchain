@@ -84,7 +84,7 @@ public class OtpService {
         } catch (Exception ex) {
             // Log failure details
             log.error("Unable to send OTP email to {}: {}", recipientEmail, ex.getMessage());
-            log.debug("OTP email failure details", ex);
+            log.error("OTP email failure details", ex);
             if (requireDelivery) {
                 // In production or when delivery required, fail as before
                 throw new IllegalStateException("Unable to send verification email. Verify the configured SMTP app password and sender account.", ex);
