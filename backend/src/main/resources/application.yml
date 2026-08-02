@@ -20,7 +20,7 @@ spring:
       max-request-size: 10MB
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${PORT:8081}
 
 management:
   endpoints:
@@ -37,8 +37,8 @@ management:
 spring.mail:
   host: smtp.gmail.com
   port: 587
-  username: ${MAIL_USERNAME:medchainteam23@gmail.com}
-  password: ${MAIL_PASSWORD:gkgdvkmlaxevmkqf}
+  username: ${MAIL_USERNAME:}
+  password: ${MAIL_PASSWORD:}
   properties:
     mail.smtp.auth: true
     mail.smtp.starttls.enable: true

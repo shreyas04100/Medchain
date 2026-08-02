@@ -1,0 +1,15 @@
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.cache/
+backend/target/
+ml/data/
+ml/saved_models/
+ml/.venv/
+*.log
+*.tmp
+*.temp
+.vscode/
+.vscode-backup/
+.idea/
+.git

@@ -1,0 +1,43 @@
+services:
+  - type: web_service
+    name: medchain-backend
+    env: docker
+    region: oregon
+    repo: https://github.com/<your-org>/<your-repo>.git
+    branch: main
+    dockerfilePath: backend/Dockerfile
+    plan: starter
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: PORT
+        value: 8081
+      - key: DB_URL
+        value: jdbc:postgresql://<your-db-host>:5432/medchain
+      - key: DB_USERNAME
+        value: <db_username>
+      - key: DB_PASSWORD
+        value: <db_password>
+      - key: MAIL_USERNAME
+        value: <smtp_username>
+      - key: MAIL_PASSWORD
+        value: <smtp_password>
+      - key: JWT_SECRET
+        value: <your_jwt_secret>
+      - key: ML_API_URL
+        value: https://<your-ml-service>.onrender.com
+  - type: web_service
+    name: medchain-ml
+    env: docker
+    region: oregon
+    repo: https://github.com/<your-org>/<your-repo>.git
+    branch: main
+    dockerfilePath: ml/Dockerfile
+    plan: starter
+    envVars:
+      - key: PORT
+        value: 8000
+  - type: postgres
+    name: medchain-db
+    plan: starter
+    region: oregon
