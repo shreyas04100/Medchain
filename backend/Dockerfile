@@ -1,12 +1,21 @@
 FROM maven:3.9.8-eclipse-temurin-17 AS builder
+
 WORKDIR /workspace
-COPY backend/pom.xml backend/pom.xml
-COPY backend/src backend/src
-RUN mvn -B -f backend/pom.xml clean package -DskipTests
+
+COPY pom.xml .
+COPY src ./src
+COPY mvnw .
+COPY .mvn ./.mvn
+
+RUN chmod +x mvnw
+RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:17-jre-jammy
+
 WORKDIR /app
-COPY --from=builder /workspace/backend/target/backend-1.0.0-SNAPSHOT.jar /app/app.jar
+
+COPY --from=builder /workspace/target/*.jar app.jar
+
 EXPOSE 8081
-ENV PORT=8081
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+ENTRYPOINT ["java","-jar","app.jar"]
