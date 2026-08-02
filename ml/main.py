@@ -1,12 +1,14 @@
 from datetime import datetime, timezone
 import os
 from typing import Any
+import json
 import numpy as np
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from train import get_or_train
+from train import get_or_train, MODEL_PATH, SCALER_PATH, METRICS_PATH
+import joblib
 
 app = FastAPI(title="MedChain Sentinel AI", version="1.0.0")
 
@@ -17,8 +19,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load or train model at startup
-model, scaler, metrics = get_or_train()
+
+# Attempt to load pre-saved model artifacts first. Only fallback to training if artifacts are missing.
+def _load_saved_artifacts():
+    try:
+        if MODEL_PATH.exists() and SCALER_PATH.exists() and METRICS_PATH.exists():
+            model = joblib.load(MODEL_PATH)
+            scaler = joblib.load(SCALER_PATH)
+            with open(METRICS_PATH, "r", encoding="utf-8") as f:
+                metrics = json.load(f)
+            print("Loaded saved model artifacts from:", MODEL_PATH.parent)
+            return model, scaler, metrics
+        else:
+            print("Saved model artifacts not found at expected paths.")
+    except Exception as e:
+        # Log and return None to trigger fallback to get_or_train()
+        print("Error loading saved model artifacts:", str(e))
+    return None, None, None
+
+
+# Load saved artifacts or train if necessary
+model, scaler, metrics = _load_saved_artifacts()
+if model is None or scaler is None or metrics is None:
+    # Fallback: get_or_train() will load if present, otherwise train.
+    print("Falling back to get_or_train() (will train if saved artifacts are not present).")
+    model, scaler, metrics = get_or_train()
+
 feature_names: list[str] = metrics.get("feature_names", [])
 num_features: int = metrics.get("num_features", 0)
 
