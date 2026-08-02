@@ -33,6 +33,9 @@ spring:
             enable: true
             required: true
 
+mail:
+  from: ${MAIL_FROM}
+
 server:
   port: ${PORT:8081}
 

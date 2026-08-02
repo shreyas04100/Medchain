@@ -28,6 +28,7 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
@@ -40,6 +41,8 @@ public class AuthController {
             authenticationService.requestRegistrationOtp(request);
             return ResponseEntity.ok(Map.of("message", "Verification code sent to your email"));
         } catch (RuntimeException ex) {
+            // Ensure full stacktrace is logged so Render logs contain the original cause
+            log.error("Error while handling register/request-otp", ex);
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(Map.of("message", ex.getMessage()));
         }
     }
@@ -69,6 +72,7 @@ public class AuthController {
             authenticationService.requestForgotPasswordOtp(request);
             return ResponseEntity.ok(Map.of("message", "Password reset verification code sent to your email"));
         } catch (RuntimeException ex) {
+            log.error("Error while handling forgot-password/request-otp", ex);
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(Map.of("message", ex.getMessage()));
         }
     }

@@ -23,7 +23,7 @@ public class OtpService {
     private final Logger log = LoggerFactory.getLogger(OtpService.class);
     private final SecureRandom secureRandom = new SecureRandom();
 
-    @Value("${spring.mail.username:medchainteam23@gmail.com}")
+    @Value("${mail.from}")
     private String senderEmail;
 
     public String generateAndSendOtp(String email, String purpose) {
